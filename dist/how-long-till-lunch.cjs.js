@@ -2,34 +2,58 @@
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var ms = _interopDefault(require('ms'));
+var store = _interopDefault(require('store'));
 
-function getNextLunchtime (hours, minutes) {
-	var lunchtime = new Date();
+var main = (function() {
 
-	lunchtime.setHours(hours);
-	lunchtime.setMinutes(minutes);
-	lunchtime.setSeconds(0);
-	lunchtime.setMilliseconds(0);
+	const Frecent = function Frecent(items) {
+		this.items = store.get('items') || this.mapItems(items) || [];
 
-	// if we've already had lunch today, start planning
-	// tomorrow's lunch
-	if (lunchtime < Date.now()) lunchtime.setDate(lunchtime.getDate() + 1);
+		this.save(this.items);
+	};
 
-	return lunchtime;
-}
+	Frecent.prototype.add = function add(item, visits, timestamp) {
+		this.items.push({
+			item,
+			visits, 
+			timestamp,
+			weight: this.frecency(visits, timestamp || new Date())
+		});
 
-function millisecondsUntil(date) {
-	return date - Date.now();
-}
+		this.save(this.items);
+	};
+	
+	Frecent.prototype.frecency = function frecency(visits, timestamp) {
+		function getDays(a, b) {
+			var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
 
-function howLongUntilLunch(hours, minutes) {
-	// lunch is at 12.30
-	if (hours === undefined) hours = 12;
-	if (minutes === undefined) minutes = 30;
+			return Math.round(Math.abs((a.getTime() - b.getTime())/(oneDay)));
+		}
 
-	var millisecondsUntilLunchTime = millisecondsUntil(getNextLunchtime(hours, minutes));
-	return ms(millisecondsUntilLunchTime, { long: true });
-}
+		return (visits * 100) / getDays(new Date().now(), timestamp)
+	};
 
-module.exports = howLongUntilLunch;
+	Frecent.prototype.get = function get() {
+		return this.items.sort((a, b) => a.weight >= b.weight)
+	};
+
+	Frecent.prototype.mapItems = function mapItems(items) {
+		return items.map(item => ({
+			item,
+			visits: 0,
+			lastVisit: null,
+			weight: null
+		}))
+	};
+
+	Frecent.prototype.save = function save(items) {
+		store.set('items', {
+			items: this.items
+		});	
+	};
+
+	return Frecent
+
+})();
+
+module.exports = main;
