@@ -1,12 +1,10 @@
 {
   "name": "rollup-starter-lib",
   "version": "1.0.0",
-  "main": "dist/how-long-till-lunch.cjs.js",
-  "module": "dist/how-long-till-lunch.esm.js",
-  "browser": "dist/how-long-till-lunch.umd.js",
-  "dependencies": {
-    "store": "^2.0.12"
-  },
+  "main": "dist/frecent.cjs.js",
+  "module": "dist/frecent.esm.js",
+  "browser": "dist/frecent.umd.js",
+  "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
