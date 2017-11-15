@@ -23,6 +23,22 @@ const itemsToTrack = [
     { url: 'https://example.org' }
 ]
 
+// Alternatively, you can load previously parsed data
+const itemsToTrack = [
+  { 
+    body: {url: 'https://example.com' },
+    _visits: 2,
+    _lastVisited: [Date],
+    _weight: 140
+  },
+  { 
+    body: {url: 'https://example.org' }, 
+    _visits: 1,
+    _lastVisited: [Date],
+    _weight: 90
+  }
+]
+
 frecent.load(itemsToTrack)
 
 // 'Visit' a item (will increase the weight of the item.
