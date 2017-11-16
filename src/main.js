@@ -6,16 +6,13 @@ export default (function () {
     if (items) {
       this.load(items)
     }
+
+    return this;
   }
 
-  Frecent.prototype.frecency = function frecency(visits, timestamp) {
-    function getDays(a, b) {
-      const oneDay = 24 * 60 * 60 * 1000;
-
-      return Math.round(Math.abs((a.getTime() - b.getTime()) / (oneDay)));
-    }
-
-    const days = getDays(new Date(), timestamp)
+  Frecent.prototype.frecency = function frecency(visits, timestamp) { 
+    const oneDay = 24 * 60 * 60 * 1000;
+    const days = Math.round(Math.abs(((new Date()).getTime() - timestamp.getTime()) / (oneDay)));
 
     return (visits * 100) / ((days === 0) ? 1 : days)
   }
@@ -47,9 +44,9 @@ export default (function () {
 
   Frecent.prototype.visit = function visit(key, item, cb) {
     function prop(obj,path) {
-      path=path.split('.');
-      var res=obj;
-      for (var i=0;i<path.length;i++) res=res[path[i]];
+      path = path.split('.');
+      let res = obj;
+      for (let i = 0; i < path.length; i++) res = res[path[i]];
       return res;
     }
 
