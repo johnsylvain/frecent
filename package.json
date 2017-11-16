@@ -1,5 +1,5 @@
 {
-  "name": "rollup-starter-lib",
+  "name": "frecent",
   "version": "1.0.0",
   "main": "dist/frecent.cjs.js",
   "module": "dist/frecent.esm.js",
