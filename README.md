@@ -1,5 +1,6 @@
 # Frecent
 [![Travis](https://img.shields.io/travis/johnsylvain/frecent.svg)](https://travis-ci.org/johnsylvain/frecent)
+[![npm](https://img.shields.io/npm/v/frecent.svg)](https://npmjs.org/package/frecent)
 > Manage the "frencency" of objects
 
 ### What is frecency?
@@ -28,13 +29,13 @@ const itemsToTrack = [
   { 
     body: {url: 'https://example.com' },
     _visits: 2,
-    _lastVisited: [Date],
+    _lastVisited: [Date|Timestamp],
     _weight: 140
   },
   { 
     body: {url: 'https://example.org' }, 
     _visits: 1,
-    _lastVisited: [Date],
+    _lastVisited: [Date|Timestamp],
     _weight: 90
   }
 ]

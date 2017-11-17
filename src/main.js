@@ -10,7 +10,7 @@ export default (function () {
     return this;
   }
 
-  Frecent.prototype.frecency = function frecency(visits, timestamp) { 
+  Frecent.prototype._frecency = function _frecency(visits, timestamp) { 
     const oneDay = 24 * 60 * 60 * 1000;
     const days = Math.round(Math.abs(((new Date()).getTime() - timestamp.getTime()) / (oneDay)));
 
@@ -21,7 +21,7 @@ export default (function () {
     return this.items
       .map(item => Object.assign(
         item,
-        item._weight = this.frecency(item._visits, item._lastVisit)
+        { _weight: this._frecency(item._visits, item._lastVisit) }
       ))
       .sort((a, b) => a._weight <= b._weight)
   }
@@ -43,11 +43,11 @@ export default (function () {
   }
 
   Frecent.prototype.visit = function visit(key, item, cb) {
-    function prop(obj,path) {
-      path = path.split('.');
+    function prop(obj, path) {
+      path = path.split('.')
       let res = obj;
-      for (let i = 0; i < path.length; i++) res = res[path[i]];
-      return res;
+      for (let i = 0; i < path.length; i++) res = res[path[i]]
+      return res
     }
 
     let ref = this.items.find(i => prop(i.body, key) === item)
