@@ -1,53 +1,67 @@
-var main = (function() {
+var main = (function () {
 
-	const Frecent = function Frecent(items) {
-		this.items = [];
+  const Frecent = function Frecent(items) {
+    this.items = [];
 
-		if (items) {
-			this.load(items);
-		}
-	};
+    if (items) {
+      this.load(items);
+    }
 
-	Frecent.prototype.frecency = function frecency(visits, timestamp) {
-		function getDays(a, b) {
-			const oneDay = 24*60*60*1000;
+    return this;
+  };
 
-			return Math.round(Math.abs((a.getTime() - b.getTime())/(oneDay)));
-		}
+  Frecent.prototype._frecency = function _frecency(visits, timestamp) { 
+    const oneDay = 24 * 60 * 60 * 1000;
+    const days = Math.round(Math.abs(((new Date()).getTime() - timestamp.getTime()) / (oneDay)));
 
-		return (visits * 100) / getDays(new Date(), timestamp)
-	};
-	
-	Frecent.prototype.get = function get() {
-		return this.items
-			.map(item => Object.assign(
-				item, 
-				item._weight = this.frecency(item._visits, item._lastVisit)
-			))
-			.sort((a, b) => a._weight >= b._weight)
-	};
+    return (visits * 100) / ((days === 0) ? 1 : days)
+  };
 
-	Frecent.prototype.load = function load(items) {
-		this.items = items.map(item => ({
-			item,
-			_visits: 0,
-			_lastVisit: null,
-			_weight: null
-		}));
-	};
+  Frecent.prototype.get = function get() {
+    return this.items
+      .map(item => Object.assign(
+        item,
+        { _weight: this._frecency(item._visits, item._lastVisit) }
+      ))
+      .sort((a, b) => b._weight - a._weight)
+  };
 
-	Frecent.prototype.visit = function visit(item) {
-		let ref = this.items.find(i => i.item === item);
-		let idx = this.items.indexOf(ref);
+  Frecent.prototype.load = function load(items) {
+    const predicate = item => {
+      if (!item.body) {
+        return {
+          body: item,
+          _visits: 0,
+          _lastVisit: null,
+          _weight: null
+        }
+      }
+      return item
+    };
 
-		Object.assign(this.items[idx], {
-			_visits: this.items[idx]._visits + 1,
-			_lastVisit: new Date()
-		});
-		
-	};
+    this.items = items.map(predicate);
+  };
 
-	return Frecent
+  Frecent.prototype.visit = function visit(key, item, cb) {
+    function prop(obj, path) {
+      path = path.split('.');
+      let res = obj;
+      for (let i = 0; i < path.length; i++) res = res[path[i]];
+      return res
+    }
+
+    let ref = this.items.find(i => prop(i.body, key) === item);
+    let idx = this.items.indexOf(ref);
+
+    Object.assign(this.items[idx], {
+      _visits: this.items[idx]._visits + 1,
+      _lastVisit: new Date()
+    });
+
+    if (typeof cb !== 'undefined') cb();
+  };
+
+  return Frecent
 
 })();
 
