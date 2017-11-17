@@ -1,6 +1,6 @@
 {
   "name": "frecent",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/frecent.cjs.js",
   "module": "dist/frecent.esm.js",
   "browser": "dist/frecent.umd.js",
