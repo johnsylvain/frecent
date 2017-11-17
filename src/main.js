@@ -23,7 +23,7 @@ export default (function () {
         item,
         { _weight: this._frecency(item._visits, item._lastVisit) }
       ))
-      .sort((a, b) => a._weight <= b._weight)
+      .sort((a, b) => b._weight - a._weight)
   }
 
   Frecent.prototype.load = function load(items) {
