@@ -11,12 +11,13 @@
     "jest": "^21.2.1",
     "rollup": "^0.50.0",
     "rollup-plugin-commonjs": "^8.2.6",
-    "rollup-plugin-node-resolve": "^3.0.0"
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "standard": "^10.0.3"
   },
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "test": "./node_modules/.bin/jest"
+    "test": "standard src/main.js && ./node_modules/.bin/jest"
   },
   "files": [
     "dist"

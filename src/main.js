@@ -1,6 +1,5 @@
 export default (function () {
-
-  const Frecent = function Frecent(items) {
+  const Frecent = function Frecent (items) {
     if (!(this instanceof Frecent)) return new Frecent(items)
 
     this.items = []
@@ -9,17 +8,17 @@ export default (function () {
       this.load(items)
     }
 
-    return this;
+    return this
   }
 
-  Frecent.prototype._frecency = function _frecency(visits, timestamp) { 
-    const oneDay = 24 * 60 * 60 * 1000;
-    const days = Math.round(Math.abs(((new Date()).getTime() - timestamp.getTime()) / (oneDay)));
+  Frecent.prototype._frecency = function _frecency (visits, timestamp) {
+    const oneDay = 24 * 60 * 60 * 1000
+    const days = Math.round(Math.abs(((new Date()).getTime() - timestamp.getTime()) / (oneDay)))
 
     return (visits * 100) / ((days === 0) ? 1 : days)
   }
 
-  Frecent.prototype.get = function get() {
+  Frecent.prototype.get = function get () {
     return this.items
       .map(item => Object.assign(
         item,
@@ -28,7 +27,7 @@ export default (function () {
       .sort((a, b) => b._weight - a._weight)
   }
 
-  Frecent.prototype.load = function load(items) {
+  Frecent.prototype.load = function load (items) {
     const predicate = item => {
       if (!item.body) {
         return {
@@ -44,16 +43,16 @@ export default (function () {
     this.items = items.map(predicate)
   }
 
-  Frecent.prototype.visit = function visit(key, item, cb) {
-    function prop(obj, path) {
+  Frecent.prototype.visit = function visit (key, item, cb) {
+    function prop (obj, path) {
       path = path.split('.')
-      let res = obj;
+      let res = obj
       for (let i = 0; i < path.length; i++) res = res[path[i]]
       return res
     }
 
     let ref = this.items.find(i => prop(i.body, key) === item)
-    let idx = this.items.indexOf(ref);
+    let idx = this.items.indexOf(ref)
 
     Object.assign(this.items[idx], {
       _visits: this.items[idx]._visits + 1,
@@ -64,5 +63,4 @@ export default (function () {
   }
 
   return Frecent
-
 })()
