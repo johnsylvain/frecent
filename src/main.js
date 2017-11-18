@@ -1,6 +1,8 @@
 export default (function () {
 
   const Frecent = function Frecent(items) {
+    if (!(this instanceof Frecent)) return new Frecent(items)
+
     this.items = []
 
     if (items) {
