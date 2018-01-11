@@ -2598,6 +2598,10 @@ object-keys@^1.0.10, object-keys@^1.0.8:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.0.11.tgz#c54601778ad560f1142ce0e01bcca8b56d13426d"
 
+object-path-resolve@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/object-path-resolve/-/object-path-resolve-1.0.2.tgz#e2f6b081c1ce4e420c12d4c93c1b095beb89f98e"
+
 object.assign@^4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/object.assign/-/object.assign-4.0.4.tgz#b1c9cc044ef1b9fe63606fc141abbb32e14730cc"

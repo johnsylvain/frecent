@@ -1,3 +1,5 @@
+import resolve from 'object-path-resolve'
+
 export default (function () {
   const Frecent = function Frecent (items) {
     if (!(this instanceof Frecent)) return new Frecent(items)
@@ -44,15 +46,8 @@ export default (function () {
   }
 
   Frecent.prototype.visit = function visit (key, item, cb) {
-    function prop (obj, path) {
-      path = path.split('.')
-      let res = obj
-      for (let i = 0; i < path.length; i++) res = res[path[i]]
-      return res
-    }
-
-    let ref = this.items.find(i => prop(i.body, key) === item)
-    let idx = this.items.indexOf(ref)
+    const ref = this.items.find(i => resolve(i.body, key) === item)
+    const idx = this.items.indexOf(ref)
 
     Object.assign(this.items[idx], {
       _visits: this.items[idx]._visits + 1,

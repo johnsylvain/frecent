@@ -6,7 +6,9 @@
   "main": "dist/frecent.cjs.js",
   "module": "dist/frecent.esm.js",
   "browser": "dist/frecent.umd.js",
-  "dependencies": {},
+  "dependencies": {
+    "object-path-resolve": "^1.0.2"
+  },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
