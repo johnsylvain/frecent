@@ -1,4 +1,4 @@
-import Frecent from '../src/main'
+import Frecent from '../src'
 
 describe('Frecent', function() {
 
