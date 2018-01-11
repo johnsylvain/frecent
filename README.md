@@ -74,6 +74,8 @@ const ranked = frecent.get()
 // ]
 
 ```
+## Releases
+__1.0.2:__ Use dot or bracket notation in `visit` method via [object-path-resolve](https://github.com/johnsylvain/object-path-resolve)
 
 ## Contributing
 You can request a new feature by submitting an issue. If you would like to implement a new feature feel free to issue a Pull Request.

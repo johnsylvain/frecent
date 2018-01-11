@@ -1,13 +1,14 @@
 {
   "name": "frecent",
-  "version": "1.0.3",
+  "version": "1.0.2",
   "description": "Track and rank objects by their frecency",
   "respository": "https://github.com/johnsylvain/frecent",
   "main": "dist/frecent.cjs.js",
   "module": "dist/frecent.esm.js",
   "browser": "dist/frecent.umd.js",
+  "source": "src/index.js",
   "dependencies": {
-    "object-path-resolve": "^1.0.2"
+    "object-path-resolve": "^1.0.4"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -15,13 +16,15 @@
     "jest": "^21.2.1",
     "rollup": "^0.50.0",
     "rollup-plugin-commonjs": "^8.2.6",
-    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-node-resolve": "^3.0.2",
     "standard": "^10.0.3"
   },
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "test": "standard src/index.js && jest"
+    "test": "standard src/index.js && jest",
+    "release": "npm t && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
+    "prepublish": "npm run build"
   },
   "files": [
     "dist"
