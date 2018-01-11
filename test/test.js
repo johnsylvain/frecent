@@ -53,7 +53,7 @@ describe('Frecent', function() {
     
   })
 
-  it('should compute frecency with nested parameters', () => {
+  it('should compute frecency with nested parameters using dot notation', () => {
     const items = [
       { 
         data: {
@@ -74,6 +74,33 @@ describe('Frecent', function() {
     this.frecent.visit('data.url', 'https://example.org')
     this.frecent.visit('data.url', 'https://example.org')
     this.frecent.visit('data.url', 'https://example.org')
+
+    expect(this.frecent.get()[0].body).toEqual(items[1])
+
+    
+  })
+
+  it('should compute frecency with nested parameters using bracket notation', () => {
+    const items = [
+      { 
+        data: {
+          url: 'https://example.com' 
+        } 
+      },
+      { 
+        data: {
+          url: 'https://example.org' 
+        } 
+      }
+    ];
+    
+    this.frecent.load(items)
+
+    this.frecent.visit('data["url"]', 'https://example.com')
+    this.frecent.visit('data["url"]', 'https://example.com')
+    this.frecent.visit('data["url"]', 'https://example.org')
+    this.frecent.visit('data["url"]', 'https://example.org')
+    this.frecent.visit('data["url"]', 'https://example.org')
 
     expect(this.frecent.get()[0].body).toEqual(items[1])
 

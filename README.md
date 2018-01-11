@@ -12,6 +12,18 @@ More information can be found [here](https://en.wikipedia.org/wiki/Frecency)
 - Simple API
 - Lightweight
 
+## Methods
+### `frecent.load(items)`
+> Load an array of `items` that you wish to be tracked. Ideally, this should be an array of Objects.
+
+### `frecent.visit(prop, attr, [cb])`
+> Visit an item by passing the property path you wish to target (`prop`) and the value of that target property (`attr`). Optional callback (`cb`).
+
+> Example: `frecent.visit('data.name.first', 'John')`. The first argument tells frecent the path to the target path. The second argument should be the expected value to the path specified. See [Usage](#usage) for more details.
+
+### `frecent.get()`
+> Retrieve the ranked objects. See [Usage](#usage) to see the returned data structure.
+
 ## Usage
 ```js
 import Frecent from 'frecent'
@@ -47,7 +59,7 @@ frecent.load(itemsToTrack)
 frecent.visit('url', 'https://example.com')
 
 // Example: if object has nested properties
-// use dot syntax to notate nesting
+// use dot or bracket syntax to notate nested properties
 frecent.visit('data.url', 'https://example.com')
 
 // Retrieve items ranked by 'Frecency'
