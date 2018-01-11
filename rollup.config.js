@@ -5,7 +5,7 @@ import pkg from './package.json';
 export default [
 	// browser-friendly UMD build
 	{
-		input: 'src/main.js',
+		input: 'src/index.js',
 		output: {
 			file: pkg.browser,
 			format: 'umd'

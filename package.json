@@ -1,6 +1,6 @@
 {
   "name": "frecent",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Track and rank objects by their frecency",
   "respository": "https://github.com/johnsylvain/frecent",
   "main": "dist/frecent.cjs.js",
@@ -19,7 +19,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "test": "standard src/main.js && ./node_modules/.bin/jest"
+    "test": "standard src/index.js && jest"
   },
   "files": [
     "dist"
