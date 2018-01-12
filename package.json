@@ -2,7 +2,7 @@
   "name": "frecent",
   "version": "1.0.3",
   "description": "Track and rank objects by their frecency",
-  "respository": "https://github.com/johnsylvain/frecent",
+  "repository": "https://github.com/johnsylvain/frecent.git",
   "main": "dist/frecent.cjs.js",
   "module": "dist/frecent.esm.js",
   "browser": "dist/frecent.umd.js",
@@ -15,6 +15,7 @@
     "babel-preset-env": "^1.6.1",
     "jest": "^21.2.1",
     "rollup": "^0.50.0",
+    "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.2",
     "standard": "^10.0.3"
