@@ -2,7 +2,7 @@
   "name": "frecent",
   "version": "1.0.3",
   "description": "Track and rank objects by their frecency",
-  "respository": "https://github.com/johnsylvain/frecent",
+  "repository": "https://github.com/johnsylvain/frecent.git",
   "main": "dist/frecent.cjs.js",
   "module": "dist/frecent.esm.js",
   "browser": "dist/frecent.umd.js",
