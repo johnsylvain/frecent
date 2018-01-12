@@ -1,6 +1,6 @@
 import Frecent from '../src'
 
-describe('Frecent', function() {
+describe('Frecent initialization', function() {
 
   beforeEach(() => {
     this.frecent = new Frecent()
@@ -8,6 +8,22 @@ describe('Frecent', function() {
 
   it('should be an instance', () => {
     expect(this.frecent).toBeInstanceOf(Frecent)
+  })
+
+  it('should set user settings', () => {
+    const f = new Frecent({
+      decay: 'week'
+    })
+
+    expect(f.settings.decay).toBe('week')
+  })
+
+})
+
+describe('Frecent computation', function() {
+
+  beforeEach(() => {
+    this.frecent = new Frecent()
   })
 
   it('should load items', () => {

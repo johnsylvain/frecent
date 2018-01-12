@@ -1,23 +1,32 @@
 import resolve from 'object-path-resolve'
+import { compose } from './utils'
 
 export default (function () {
-  const Frecent = function Frecent (items) {
-    if (!(this instanceof Frecent)) return new Frecent(items)
+  const Frecent = function Frecent (settings, items) {
+    if (!(this instanceof Frecent)) return new Frecent(settings, items)
 
     this.items = []
+    this.settings = Object.assign({}, this.settings, settings)
 
-    if (items) {
-      this.load(items)
-    }
+    if (items) this.load(items)
 
     return this
   }
 
   Frecent.prototype._frecency = function _frecency (visits, timestamp) {
-    const oneDay = 24 * 60 * 60 * 1000
-    const days = Math.round(Math.abs(((new Date()).getTime() - timestamp.getTime()) / (oneDay)))
+    const ms = {
+      day: 86400000,
+      week: 604800000,
+      month: 2419200000
+    }
 
-    return (visits * 100) / ((days === 0) ? 1 : days)
+    const decay = compose(
+      (ms) => ((new Date()).getTime() - timestamp.getTime()) / (ms),
+      Math.abs,
+      Math.round
+    )(ms[this.settings.decay] || ms['day'])
+
+    return (visits * 100) / ((decay === 0) ? 1 : decay)
   }
 
   Frecent.prototype.get = function get () {
@@ -30,19 +39,17 @@ export default (function () {
   }
 
   Frecent.prototype.load = function load (items) {
-    const predicate = item => {
-      if (!item.body) {
-        return {
-          body: item,
-          _visits: 0,
-          _lastVisit: null,
-          _weight: null
-        }
+    this.items = items.map(item => (!item.body)
+      ? {
+        body: item,
+        _visits: 0,
+        _lastVisit: null,
+        _weight: null
       }
-      return item
-    }
+      : item
+    )
 
-    this.items = items.map(predicate)
+    return this
   }
 
   Frecent.prototype.visit = function visit (key, item, cb) {
@@ -55,6 +62,8 @@ export default (function () {
     })
 
     if (typeof cb !== 'undefined') cb()
+
+    return this
   }
 
   return Frecent
