@@ -1,6 +1,6 @@
 {
   "name": "frecent",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Track and rank objects by their frecency",
   "repository": "https://github.com/johnsylvain/frecent.git",
   "main": "dist/frecent.cjs.js",
