@@ -30,6 +30,13 @@ import Frecent from 'frecent'
 
 const frecent = new Frecent()
 
+// initialize with custom decay time
+// Options: hour, day, week, month
+// default: day
+const frecent = new Frecent({
+  decay: 'hour'
+})
+
 // Items to be tracked can be loaded from localStorage, a DB, etc
 const itemsToTrack = [
     { url: 'https://example.com' },
@@ -75,6 +82,7 @@ const ranked = frecent.get()
 
 ```
 ## Releases
+__1.0.4:__ Specify a custom decay time
 __1.0.3:__ Use dot or bracket notation in `visit` method via [object-path-resolve](https://github.com/johnsylvain/object-path-resolve)
 
 ## Contributing

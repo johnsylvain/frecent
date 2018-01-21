@@ -15,9 +15,10 @@ export default (function () {
 
   Frecent.prototype._frecency = function _frecency (visits, timestamp) {
     const ms = {
-      day: 86400000,
-      week: 604800000,
-      month: 2419200000
+      hour: 3.6e+6,
+      day: 8.64e+7,
+      week: 6.048e+8,
+      month: 2.628e+9
     }
 
     const decay = compose(
