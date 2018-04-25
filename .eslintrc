@@ -1,0 +1,4 @@
+{
+  "extends": ["plugin:prettier/recommended", "airbnb"],
+  "parser": "typescript-eslint-parser"
+}

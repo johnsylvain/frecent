@@ -13,22 +13,37 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-prettier": "^2.6.0",
     "jest": "^21.2.1",
     "rollup": "^0.50.0",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.2",
     "rollup-plugin-typescript": "^0.8.1",
-    "standard": "^10.0.3"
+    "ts-jest": "^22.4.4",
+    "typescript-eslint-parser": "^15.0.0"
   },
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "test": "standard src/index.js && jest",
-    "release": "npm t && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
+    "test": "jest",
+    "lint": "eslint --ignore-path .gitignore \"src/*.ts\"",
+    "release":
+      "npm t && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
     "prepublish": "npm run build"
   },
-  "files": [
-    "dist"
-  ]
+  "files": ["dist"],
+  "jest": {
+    "moduleFileExtensions": ["ts", "tsx", "js"],
+    "transform": {
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "/test/.*\\.(ts|tsx|js)$",
+    "verbose": true,
+    "moduleDirectories": ["node_modules", "src"]
+  }
 }
