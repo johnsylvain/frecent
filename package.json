@@ -6,7 +6,7 @@
   "main": "dist/frecent.cjs.js",
   "module": "dist/frecent.esm.js",
   "browser": "dist/frecent.umd.js",
-  "source": "src/index.js",
+  "source": "src/index.ts",
   "dependencies": {
     "object-path-resolve": "^1.0.4"
   },
@@ -18,6 +18,7 @@
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.2",
+    "rollup-plugin-typescript": "^0.8.1",
     "standard": "^10.0.3"
   },
   "scripts": {
