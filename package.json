@@ -11,6 +11,7 @@
     "object-path-resolve": "^1.0.4"
   },
   "devDependencies": {
+    "@types/jest": "^23.0.1",
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.19.1",
@@ -31,18 +32,27 @@
     "dev": "rollup -c -w",
     "test": "jest",
     "lint": "eslint --ignore-path .gitignore \"src/*.ts\"",
-    "release":
-      "npm t && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
+    "release": "npm t && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
     "prepublish": "npm run build"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "jest": {
-    "moduleFileExtensions": ["ts", "tsx", "js"],
+    "roots": [
+      "<rootDir>"
+    ],
     "transform": {
-      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      "^.+\\.tsx?$": "ts-jest"
     },
-    "testRegex": "/test/.*\\.(ts|tsx|js)$",
-    "verbose": true,
-    "moduleDirectories": ["node_modules", "src"]
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }
