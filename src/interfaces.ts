@@ -9,5 +9,12 @@ export interface Item {
     lastVisit: Date;
     weight: number;
   };
-  datum: object;
+  data: object;
 }
+
+export interface Mappings {
+  hour: number;
+  day: number;
+  week: number;
+  month: number;
+};

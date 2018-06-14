@@ -26,14 +26,14 @@ More information can be found [here](https://en.wikipedia.org/wiki/Frecency)
 
 ## Usage
 ```js
-import Frecent from 'frecent'
+import frecent from 'frecent'
 
-const frecent = new Frecent()
+const tracker = frecent()
 
 // initialize with custom decay time
 // Options: hour, day, week, month
 // default: day
-const frecent = new Frecent({
+const tracker = frecent({
   decay: 'hour'
 })
 
@@ -45,44 +45,46 @@ const itemsToTrack = [
 
 // Alternatively, you can load previously parsed data
 const itemsToTrack = [
-  { 
+  {
     body: {url: 'https://example.com' },
     _visits: 2,
     _lastVisited: [Date|Timestamp],
     _weight: 140
   },
-  { 
-    body: {url: 'https://example.org' }, 
+  {
+    body: {url: 'https://example.org' },
     _visits: 1,
     _lastVisited: [Date|Timestamp],
     _weight: 90
   }
 ]
 
-frecent.load(itemsToTrack)
+tracker.load(itemsToTrack)
 
 // 'Visit' a item (will increase the weight of the item.
 // Therefore increasing the likelihood of revisiting)
-frecent.visit('url', 'https://example.com')
+tracker.visit('url', 'https://example.com')
 
 // Example: if object has nested properties
 // use dot or bracket syntax to notate nested properties
-frecent.visit('data.url', 'https://example.com')
+tracker.visit('data.url', 'https://example.com')
 
 // Retrieve items ranked by 'Frecency'
-const ranked = frecent.get()
+const ranked = tracker.get()
 // [
 //   {
 //     body: { url: 'https://example.com' },
-//     _visits: 1, 
-//     _lastVisited: [Date], 
-//     _weight: 100, 
+//     _visits: 1,
+//     _lastVisited: [Date],
+//     _weight: 100,
 //   }
 // ]
 
 ```
 ## Releases
+
 __1.0.4:__ Specify a custom decay time
+
 __1.0.3:__ Use dot or bracket notation in `visit` method via [object-path-resolve](https://github.com/johnsylvain/object-path-resolve)
 
 ## Contributing

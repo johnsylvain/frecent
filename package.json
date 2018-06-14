@@ -33,7 +33,7 @@
     "test": "jest",
     "lint": "eslint --ignore-path .gitignore \"src/*.ts\"",
     "release": "npm t && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
-    "prepublish": "npm run build"
+    "prepublishOnly": "npm run build"
   },
   "files": [
     "dist"

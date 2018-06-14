@@ -1,26 +1,8 @@
-import Frecent from '../src/index.ts';
+import frecent from '../src/index';
 
-describe('Frecent initialization', function() {
+describe('Frecent', function() {
   beforeEach(() => {
-    this.frecent = new Frecent();
-  });
-
-  it('should be an instance', () => {
-    expect(this.frecent).toBeInstanceOf(Frecent);
-  });
-
-  it('should set user settings', () => {
-    const f = new Frecent({
-      decay: 'week'
-    });
-
-    expect(f.settings.decay).toBe('week');
-  });
-});
-
-describe('Frecent computation', function() {
-  beforeEach(() => {
-    this.frecent = new Frecent();
+    this.frecent = frecent();
   });
 
   it('should load items', () => {

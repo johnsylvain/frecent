@@ -1,31 +1,35 @@
 import resolve from 'object-path-resolve';
-import { Item, Settings } from './interfaces';
+import { Item, Settings, Mappings } from './interfaces';
 
-export default class Frecent {
-  items: Array<Item>;
+class Frecent {
+  items: Item[];
 
-  constructor(private settings?: Settings, items?: Array<object | Item>) {
-    if (items) this.load(items);
-  }
+  constructor(private settings?: Settings) {}
 
   private frecency(visits: number, timestamp: Date): number {
-    const ms = {
-      hour: 3.6e6,
-      day: 8.64e7,
-      week: 6.048e8,
-      month: 2.628e9
-    };
-    const decay =
-      (new Date().getTime() - timestamp.getTime()) /
-      Math.round(Math.abs(ms[this.settings.decay] || ms['day']));
+    function ms<T, K extends keyof T>(key: K = 'day') {
+      const mappings: Mappings = {
+        hour: 3.6e6,
+        day: 8.64e7,
+        week: 6.048e8,
+        month: 2.628e9
+      };
 
-    return visits * (this.settings.weight || 100) / (decay === 0 ? 1 : decay);
+      return mappings[key];
+    }
+    const decay = Math.round(
+      Math.abs(
+        (new Date().getTime() - timestamp.getTime()) / ms(this.settings.decay)
+      )
+    );
+
+    return (visits * (this.settings.weight || 100)) / (decay || 1);
   }
 
-  get(): Array<object> {
+  get(): object[] {
     this.items = this.items
       .map((item: Item) => ({
-        datum: item,
+        data: item,
         meta: {
           ...item.meta,
           weight: this.frecency(item.meta.visits, item.meta.lastVisit)
@@ -33,18 +37,23 @@ export default class Frecent {
       }))
       .sort((a: Item, b: Item) => b.meta.weight - a.meta.weight);
 
-    return this.items.map((item: Item) => item.datum);
+    return this.items.map((item: Item) => item.data);
   }
 
   load(items: Array<Item | object>): object {
-    this.items = this.items.map(item => ({
-      meta: {
-        visits: 0,
-        lastVisit: null,
-        weight: null
-      },
-      datum: item
-    }));
+    this.items = items.map(
+      (item: any) =>
+        !item.data || !item.meta
+          ? {
+              meta: {
+                visits: 0,
+                lastVisit: null,
+                weight: null
+              },
+              data: item
+            }
+          : item
+    );
 
     return this;
   }
@@ -61,3 +70,5 @@ export default class Frecent {
     return this;
   }
 }
+
+export default (s?: Settings) => new Frecent(s);
