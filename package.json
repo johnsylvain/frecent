@@ -8,7 +8,7 @@
   "browser": "dist/frecent.umd.js",
   "source": "src/index.ts",
   "dependencies": {
-    "object-path-resolve": "^1.0.4"
+    "object-path-resolve": "^1.0.6"
   },
   "devDependencies": {
     "@types/jest": "^23.0.1",
@@ -19,12 +19,14 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-prettier": "^2.6.0",
     "jest": "^21.2.1",
+    "prettier": "^1.13.5",
     "rollup": "^0.50.0",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.2",
     "rollup-plugin-typescript": "^0.8.1",
     "ts-jest": "^22.4.4",
+    "typescript": "^2.9.2",
     "typescript-eslint-parser": "^15.0.0"
   },
   "scripts": {

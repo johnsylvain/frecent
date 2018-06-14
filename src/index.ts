@@ -1,5 +1,5 @@
 import resolve from 'object-path-resolve';
-import { Item, Settings, Mappings } from './interfaces';
+import { Item, Settings } from './interfaces';
 
 class Frecent {
   items: Item[];
@@ -7,8 +7,8 @@ class Frecent {
   constructor(private settings?: Settings) {}
 
   private frecency(visits: number, timestamp: Date): number {
-    function ms<T, K extends keyof T>(key: K = 'day') {
-      const mappings: Mappings = {
+    function ms(key: string = 'day') {
+      const mappings: { [key: string]: number } = {
         hour: 3.6e6,
         day: 8.64e7,
         week: 6.048e8,
@@ -31,8 +31,8 @@ class Frecent {
       .map((item: Item) => ({
         data: item,
         meta: {
-          ...item.meta,
-          weight: this.frecency(item.meta.visits, item.meta.lastVisit)
+          weight: this.frecency(item.meta.visits, item.meta.lastVisit),
+          ...item.meta
         }
       }))
       .sort((a: Item, b: Item) => b.meta.weight - a.meta.weight);

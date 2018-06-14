@@ -11,10 +11,3 @@ export interface Item {
   };
   data: object;
 }
-
-export interface Mappings {
-  hour: number;
-  day: number;
-  week: number;
-  month: number;
-};

@@ -17,10 +17,12 @@ describe('Frecent', function() {
   it('should load formatted items', () => {
     const items = [
       {
-        body: { url: 'https://example.com' },
-        _visits: 2,
-        _lastVisit: new Date(2017, 11, 10),
-        _weight: 100
+        data: { url: 'https://example.com' },
+        meta: {
+          visits: 2,
+          lastVisit: new Date(2017, 11, 10),
+          weight: 100
+        }
       }
     ];
 
@@ -35,15 +37,15 @@ describe('Frecent', function() {
       { url: 'https://example.org' }
     ];
 
-    this.frecent.load(items);
+    this.frecent
+      .load(items)
+      .visit('url', 'https://example.com')
+      .visit('url', 'https://example.com')
+      .visit('url', 'https://example.org')
+      .visit('url', 'https://example.org')
+      .visit('url', 'https://example.org');
 
-    this.frecent.visit('url', 'https://example.com');
-    this.frecent.visit('url', 'https://example.com');
-    this.frecent.visit('url', 'https://example.org');
-    this.frecent.visit('url', 'https://example.org');
-    this.frecent.visit('url', 'https://example.org');
-
-    expect(this.frecent.get()[0].body).toEqual(items[1]);
+    expect(this.frecent.get()[0]).toEqual(items[1]);
   });
 
   it('should compute frecency with nested parameters using dot notation', () => {
@@ -60,15 +62,15 @@ describe('Frecent', function() {
       }
     ];
 
-    this.frecent.load(items);
+    this.frecent
+      .load(items)
+      .visit('data.url', 'https://example.com')
+      .visit('data.url', 'https://example.com')
+      .visit('data.url', 'https://example.org')
+      .visit('data.url', 'https://example.org')
+      .visit('data.url', 'https://example.org');
 
-    this.frecent.visit('data.url', 'https://example.com');
-    this.frecent.visit('data.url', 'https://example.com');
-    this.frecent.visit('data.url', 'https://example.org');
-    this.frecent.visit('data.url', 'https://example.org');
-    this.frecent.visit('data.url', 'https://example.org');
-
-    expect(this.frecent.get()[0].body).toEqual(items[1]);
+    expect(this.frecent.get()[0]).toEqual(items[1]);
   });
 
   it('should compute frecency with nested parameters using bracket notation', () => {
@@ -85,13 +87,13 @@ describe('Frecent', function() {
       }
     ];
 
-    this.frecent.load(items);
-
-    this.frecent.visit('data["url"]', 'https://example.com');
-    this.frecent.visit('data["url"]', 'https://example.com');
-    this.frecent.visit('data["url"]', 'https://example.org');
-    this.frecent.visit('data["url"]', 'https://example.org');
-    this.frecent.visit('data["url"]', 'https://example.org');
+    this.frecent
+      .load(items)
+      .visit('data["url"]', 'https://example.com')
+      .visit('data["url"]', 'https://example.com')
+      .visit('data["url"]', 'https://example.org')
+      .visit('data["url"]', 'https://example.org')
+      .visit('data["url"]', 'https://example.org');
 
     expect(this.frecent.get()[0].body).toEqual(items[1]);
   });
