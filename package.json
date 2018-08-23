@@ -6,28 +6,53 @@
   "main": "dist/frecent.cjs.js",
   "module": "dist/frecent.esm.js",
   "browser": "dist/frecent.umd.js",
-  "source": "src/index.js",
+  "source": "src/index.ts",
   "dependencies": {
-    "object-path-resolve": "^1.0.4"
+    "object-path-resolve": "^1.0.6"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "jest": "^21.2.1",
+    "@types/jest": "^23.0.1",
+    "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-prettier": "^2.6.0",
+    "jest": "^22.4.0",
+    "prettier": "^1.13.5",
     "rollup": "^0.50.0",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.2",
-    "standard": "^10.0.3"
+    "rollup-plugin-typescript": "^0.8.1",
+    "ts-jest": "^22.4.4",
+    "typescript": "^2.9.2",
+    "typescript-eslint-parser": "^15.0.0"
   },
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "test": "standard src/index.js && jest",
+    "test": "jest",
+    "lint": "eslint --ignore-path .gitignore \"src/*.ts\"",
     "release": "npm t && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
-    "prepublish": "npm run build"
+    "prepublishOnly": "npm run build"
   },
   "files": [
     "dist"
-  ]
+  ],
+  "jest": {
+    "roots": [
+      "<rootDir>"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  }
 }
