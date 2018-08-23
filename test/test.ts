@@ -45,7 +45,7 @@ describe('Frecent', function() {
       .visit('url', 'https://example.org')
       .visit('url', 'https://example.org');
 
-    expect(this.frecent.get()[0]).toEqual(items[1]);
+    expect(this.frecent.get()[0].data).toEqual(items[1]);
   });
 
   it('should compute frecency with nested parameters using dot notation', () => {
@@ -70,7 +70,7 @@ describe('Frecent', function() {
       .visit('data.url', 'https://example.org')
       .visit('data.url', 'https://example.org');
 
-    expect(this.frecent.get()[0]).toEqual(items[1]);
+    expect(this.frecent.get()[0].data).toEqual(items[1]);
   });
 
   it('should compute frecency with nested parameters using bracket notation', () => {
@@ -95,6 +95,6 @@ describe('Frecent', function() {
       .visit('data["url"]', 'https://example.org')
       .visit('data["url"]', 'https://example.org');
 
-    expect(this.frecent.get()[0].body).toEqual(items[1]);
+    expect(this.frecent.get()[0].data).toEqual(items[1]);
   });
 });
