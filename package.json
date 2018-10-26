@@ -17,13 +17,12 @@
     "rollup": "^0.50.0",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^8.2.6",
-    "rollup-plugin-node-resolve": "^3.0.2",
-    "standard": "^10.0.3"
+    "rollup-plugin-node-resolve": "^3.0.2"
   },
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "test": "standard src/index.js && jest",
+    "test": "jest",
     "release": "npm t && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
     "prepublish": "npm run build"
   },
