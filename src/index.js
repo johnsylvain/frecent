@@ -1,71 +1,100 @@
-import resolve from 'object-path-resolve'
-import { compose } from './utils'
+class Frecent {
+  constructor(settings) {
+    this._isClean = true;
+    this.items = [];
+    this.settings = Object.assign(
+      {
+        weight: 100,
+        decay: "day"
+      },
+      settings
+    );
 
-export default (function () {
-  const Frecent = function Frecent (settings, items) {
-    if (!(this instanceof Frecent)) return new Frecent(settings, items)
-
-    this.items = []
-    this.settings = Object.assign({}, this.settings, settings)
-
-    if (items) this.load(items)
-
-    return this
+    return this;
   }
 
-  Frecent.prototype._frecency = function _frecency (visits, timestamp) {
-    const ms = {
-      hour: 3.6e+6,
-      day: 8.64e+7,
-      week: 6.048e+8,
-      month: 2.628e+9
+  frecency(visits, timestamp) {
+    function ms(key = "day") {
+      const mappings = {
+        hour: 3.6e6,
+        day: 8.64e7,
+        week: 6.048e8,
+        month: 2.628e9
+      };
+
+      return mappings[key];
     }
 
-    const decay = compose(
-      (ms) => ((new Date()).getTime() - timestamp.getTime()) / (ms),
-      Math.abs,
-      Math.round
-    )(ms[this.settings.decay] || ms['day'])
+    const decay = Math.round(
+      Math.abs(
+        (new Date().getTime() - timestamp.getTime()) / ms(this.settings.decay)
+      )
+    );
 
-    return (visits * 100) / ((decay === 0) ? 1 : decay)
+    return (visits * this.settings.weight) / (decay || 1);
   }
 
-  Frecent.prototype.get = function get () {
-    return this.items
-      .map(item => Object.assign(
-        item,
-        { _weight: this._frecency(item._visits, item._lastVisit) }
-      ))
-      .sort((a, b) => b._weight - a._weight)
+  get(includeMeta) {
+    const formatItems = (items, includeMeta) =>
+      includeMeta ? items : items.map(item => item.data);
+
+    if (this._isClean) {
+      return formatItems(this.items, includeMeta);
+    }
+
+    this.items = this.items
+      .map(item => ({
+        data: item,
+        meta: Object.assign(item.meta, {
+          weight: this.frecency(
+            item.meta.visits,
+            item.meta.lastVisit || new Date()
+          )
+        })
+      }))
+      .sort((a, b) => b.meta.weight - a.meta.weight);
+
+    this._isClean = true;
+
+    return formatItems(this.items, includeMeta);
   }
 
-  Frecent.prototype.load = function load (items) {
-    this.items = items.map(item => (!item.body)
-      ? {
-        body: item,
-        _visits: 0,
-        _lastVisit: null,
-        _weight: null
-      }
-      : item
-    )
+  load(items) {
+    this._isClean = false;
+    this.items = items.map(item =>
+      !item.data || !item.meta
+        ? {
+            meta: {
+              visits: 0,
+              lastVisit: null,
+              weight: null
+            },
+            data: item
+          }
+        : item
+    );
 
-    return this
+    return this;
   }
 
-  Frecent.prototype.visit = function visit (key, item, cb) {
-    const ref = this.items.find(i => resolve(i.body, key) === item)
-    const idx = this.items.indexOf(ref)
+  visit(predicate) {
+    if (typeof predicate !== "function") {
+      throw Error(
+        "The first argument of visit needs to be a function that returns a boolean."
+      );
+    }
 
-    Object.assign(this.items[idx], {
-      _visits: this.items[idx]._visits + 1,
-      _lastVisit: new Date()
-    })
+    const ref = this.items.find(item => predicate(item.data));
+    const index = this.items.indexOf(ref);
+    this._isClean = false;
 
-    if (typeof cb !== 'undefined') cb()
+    Object.assign(this.items[index].meta, {
+      visits: this.items[index].meta.visits + 1,
+      lastVisit: new Date()
+    });
 
-    return this
+    return this;
   }
+}
 
-  return Frecent
-})()
+export default settings => new Frecent(settings);
