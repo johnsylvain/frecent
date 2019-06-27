@@ -1,23 +1,21 @@
 declare module "object-path-resolve";
 
-declare module "frecent" {
-  export interface Settings {
+declare namespace frecent {
+  interface Settings {
     decay: string;
     weight: number;
   }
+  class Frecent {
+    public constructor(settings: Settings);
 
-  export class Frecent {
-    constructor(settings: Settings);
+    public items: any[];
+    public settings: Settings;
 
-    clean: boolean;
-    items: Array<any>;
-    settings: Settings;
-
-    frecency(visits: number, timestamp: Date): number;
-    get(includeMeta: boolean): this;
-    load(items: Array<any>): this;
-    visit(key: string, item: any): this;
+    private frecency(visits: number, timestamp: Date): number;
+    public get(includeMeta?: boolean): this;
+    public load(items: any[]): this;
+    public visit(predicate: (item: any) => boolean): this;
   }
-
-  export function fn(settings: Settings): Frecent;
 }
+
+declare function frecent(settings: frecent.Settings): frecent.Frecent;

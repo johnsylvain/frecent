@@ -12,6 +12,7 @@ describe("Frecent", function() {
     ]);
 
     expect(this.frecent.items.length).toBe(2);
+    expect(this.frecent.items[0].meta).toBeDefined();
   });
 
   it("should load formatted items", () => {
@@ -39,61 +40,11 @@ describe("Frecent", function() {
 
     this.frecent
       .load(items)
-      .visit("url", "https://example.com")
-      .visit("url", "https://example.com")
-      .visit("url", "https://example.org")
-      .visit("url", "https://example.org")
-      .visit("url", "https://example.org");
-
-    expect(this.frecent.get()[0].data).toEqual(items[1]);
-  });
-
-  it("should compute frecency with nested parameters using dot notation", () => {
-    const items = [
-      {
-        data: {
-          url: "https://example.com"
-        }
-      },
-      {
-        data: {
-          url: "https://example.org"
-        }
-      }
-    ];
-
-    this.frecent
-      .load(items)
-      .visit("data.url", "https://example.com")
-      .visit("data.url", "https://example.com")
-      .visit("data.url", "https://example.org")
-      .visit("data.url", "https://example.org")
-      .visit("data.url", "https://example.org");
-
-    expect(this.frecent.get()[0].data).toEqual(items[1]);
-  });
-
-  it("should compute frecency with nested parameters using bracket notation", () => {
-    const items = [
-      {
-        data: {
-          url: "https://example.com"
-        }
-      },
-      {
-        data: {
-          url: "https://example.org"
-        }
-      }
-    ];
-
-    this.frecent
-      .load(items)
-      .visit('data["url"]', "https://example.com")
-      .visit('data["url"]', "https://example.com")
-      .visit('data["url"]', "https://example.org")
-      .visit('data["url"]', "https://example.org")
-      .visit('data["url"]', "https://example.org");
+      .visit(item => item.url === "https://example.com")
+      .visit(item => item.url === "https://example.com")
+      .visit(item => item.url === "https://example.org")
+      .visit(item => item.url === "https://example.org")
+      .visit(item => item.url === "https://example.org");
 
     expect(this.frecent.get()[0].data).toEqual(items[1]);
   });

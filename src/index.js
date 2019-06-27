@@ -1,10 +1,14 @@
-import resolve from "object-path-resolve";
-
 class Frecent {
   constructor(settings) {
-    this.clean = true;
+    this._isClean = true;
     this.items = [];
-    this.settings = settings;
+    this.settings = Object.assign(
+      {
+        weight: 100,
+        decay: "day"
+      },
+      settings
+    );
 
     return this;
   }
@@ -23,63 +27,69 @@ class Frecent {
 
     const decay = Math.round(
       Math.abs(
-        (new Date().getTime() - timestamp.getTime()) /
-          ms(this.settings && this.settings.decay)
+        (new Date().getTime() - timestamp.getTime()) / ms(this.settings.decay)
       )
     );
 
-    return (
-      (visits * ((this.settings && this.settings.weight) || 100)) / (decay || 1)
-    );
+    return (visits * this.settings.weight) / (decay || 1);
   }
 
   get(includeMeta) {
     const formatItems = (items, includeMeta) =>
       includeMeta ? items : items.map(item => item.data);
 
-    if (this.clean) return formatItems(this.items, includeMeta);
+    if (this._isClean) {
+      return formatItems(this.items, includeMeta);
+    }
 
     this.items = this.items
       .map(item => ({
         data: item,
-        meta: {
-          ...item.meta,
-          weight: this.frecency(item.meta.visits, item.meta.lastVisit)
-        }
+        meta: Object.assign(item.meta, {
+          weight: this.frecency(
+            item.meta.visits,
+            item.meta.lastVisit || new Date()
+          )
+        })
       }))
       .sort((a, b) => b.meta.weight - a.meta.weight);
 
-    this.clean = true;
+    this._isClean = true;
 
     return formatItems(this.items, includeMeta);
   }
 
   load(items) {
-    this.clean = false;
-    this.items = items.map(
-      item =>
-        !item.data || !item.meta
-          ? {
-              meta: {
-                visits: 0,
-                lastVisit: null,
-                weight: null
-              },
-              data: item
-            }
-          : item
+    this._isClean = false;
+    this.items = items.map(item =>
+      !item.data || !item.meta
+        ? {
+            meta: {
+              visits: 0,
+              lastVisit: null,
+              weight: null
+            },
+            data: item
+          }
+        : item
     );
 
     return this;
   }
 
-  visit(key, item) {
-    const ref = this.items.find(i => resolve(i.data, key) === item);
-    const idx = this.items.indexOf(ref);
-    this.clean = false;
+  visit(predicate) {
+    if (typeof predicate !== "function") {
+      throw Error(
+        "The first argument of visit needs to be a function that returns a boolean."
+      );
+    }
 
-    Object.assign(this.items[idx].meta, {
-      visits: this.items[idx].meta.visits + 1,
+    const ref = this.items.find(item => predicate(item.data));
+    const index = this.items.indexOf(ref);
+    this._isClean = false;
+
+    Object.assign(this.items[index].meta, {
+      visits: this.items[index].meta.visits + 1,
       lastVisit: new Date()
     });
 
